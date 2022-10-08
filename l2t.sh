@@ -1,12 +1,7 @@
-#!/usr/bin/env bash
+#!/usr/bin/sudo /bin/bash
 PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin
 export PATH
-#=======================================================================#
-#   System Supported:  CentOS 6+ / Debian 7+ / Ubuntu 12+               #
-#   Description: L2TP VPN Auto Installer                                #
-#   Author: Teddysun <i@teddysun.com>                                   #
-#   Intro:  https://teddysun.com/448.html                               #
-#=======================================================================#
+
 cur_dir=`pwd`
 
 libreswan_filename="libreswan-3.27"
@@ -645,14 +640,6 @@ finally(){
     sleep 5
     ipsec verify
     echo
-    echo "###############################################################"
-    echo "# L2TP VPN Auto Installer                                     #"
-    echo "# System Supported: CentOS 6+ / Debian 7+ / Ubuntu 12+        #"
-    echo "# Intro: https://teddysun.com/448.html                        #"
-    echo "# Author: Teddysun <i@teddysun.com>                           #"
-    echo "###############################################################"
-    echo "If there is no [FAILED] above, you can connect to your L2TP "
-    echo "VPN Server with the default Username/Password is below:"
     echo
     echo "Server IP: ${IP}"
     echo "PSK      : ${mypsk}"
@@ -674,12 +661,6 @@ finally(){
 l2tp(){
     clear
     echo
-    echo "###############################################################"
-    echo "# L2TP VPN Auto Installer                                     #"
-    echo "# System Supported: CentOS 6+ / Debian 7+ / Ubuntu 12+        #"
-    echo "# Intro: https://teddysun.com/448.html                        #"
-    echo "# Author: Teddysun <i@teddysun.com>                           #"
-    echo "###############################################################"
     echo
     rootness
     tunavailable
@@ -691,83 +672,7 @@ l2tp(){
     finally
 }
 
-list_users(){
-    if [ ! -f /etc/ppp/chap-secrets ];then
-        echo "Error: /etc/ppp/chap-secrets file not found."
-        exit 1
-    fi
-    local line="+-------------------------------------------+\n"
-    local string=%20s
-    printf "${line}|${string} |${string} |\n${line}" Username Password
-    grep -v "^#" /etc/ppp/chap-secrets | awk '{printf "|'${string}' |'${string}' |\n", $1,$3}'
-    printf ${line}
-}
 
-add_user(){
-    while :
-    do
-        read -p "Please input your Username:" user
-        if [ -z ${user} ]; then
-            echo "Username can not be empty"
-        else
-            grep -w "${user}" /etc/ppp/chap-secrets > /dev/null 2>&1
-            if [ $? -eq 0 ];then
-                echo "Username (${user}) already exists. Please re-enter your username."
-            else
-                break
-            fi
-        fi
-    done
-    pass=`rand`
-    echo "Please input ${user}'s password:"
-    read -p "(Default Password: ${pass}):" tmppass
-    [ ! -z ${tmppass} ] && pass=${tmppass}
-    echo "${user}    l2tpd    ${pass}       *" >> /etc/ppp/chap-secrets
-    echo "Username (${user}) add completed."
-}
-
-del_user(){
-    while :
-    do
-        read -p "Please input Username you want to delete it:" user
-        if [ -z ${user} ]; then
-            echo "Username can not be empty"
-        else
-            grep -w "${user}" /etc/ppp/chap-secrets >/dev/null 2>&1
-            if [ $? -eq 0 ];then
-                break
-            else
-                echo "Username (${user}) is not exists. Please re-enter your username."
-            fi
-        fi
-    done
-    sed -i "/^\<${user}\>/d" /etc/ppp/chap-secrets
-    echo "Username (${user}) delete completed."
-}
-
-mod_user(){
-    while :
-    do
-        read -p "Please input Username you want to change password:" user
-        if [ -z ${user} ]; then
-            echo "Username can not be empty"
-        else
-            grep -w "${user}" /etc/ppp/chap-secrets >/dev/null 2>&1
-            if [ $? -eq 0 ];then
-                break
-            else
-                echo "Username (${user}) is not exists. Please re-enter your username."
-            fi
-        fi
-    done
-    pass=`rand`
-    echo "Please input ${user}'s new password:"
-    read -p "(Default Password: ${pass}):" tmppass
-    [ ! -z ${tmppass} ] && pass=${tmppass}
-    sed -i "/^\<${user}\>/d" /etc/ppp/chap-secrets
-    echo "${user}    l2tpd    ${pass}       *" >> /etc/ppp/chap-secrets
-    echo "Username ${user}'s password has been changed."
-}
 
 # Main process
 action=$1
