@@ -351,7 +351,7 @@ conn l2tp-psk-nonat
     dpddelay=40
     dpdtimeout=130
     dpdaction=clear
-    sha2-truncbug=yes
+    sha2-truncbug=no
 EOF
 
     cat > /etc/ipsec.secrets<<EOF
