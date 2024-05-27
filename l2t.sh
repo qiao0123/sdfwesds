@@ -646,15 +646,6 @@ finally(){
     echo "Username : ${username}"
     echo "Password : ${password}"
     echo
-    echo "If you want to modify user settings, please use below command(s):"
-    echo "l2tp -a (Add a user)"
-    echo "l2tp -d (Delete a user)"
-    echo "l2tp -l (List all users)"
-    echo "l2tp -m (Modify a user password)"
-    echo
-    echo "Welcome to visit our website: https://teddysun.com/448.html"
-    echo "Enjoy it!"
-    echo
 }
 
 
