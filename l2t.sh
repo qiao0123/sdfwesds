@@ -221,12 +221,12 @@ preinstall_l2tp(){
     [ -z ${iprange} ] && iprange="192.168.18"
 
 
-    [ -z ${mypsk} ] && mypsk="1"
+    [ -z ${mypsk} ] && mypsk="111"
 
 
-    [ -z ${username} ] && username="1"
+    [ -z ${username} ] && username="111"
  
-   password="1"
+   password="111"
     [ ! -z ${tmppassword} ] && password=${tmppassword}
 
     echo
